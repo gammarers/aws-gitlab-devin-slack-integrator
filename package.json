@@ -7,6 +7,9 @@
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",
+    "bundle": "npx projen bundle",
+    "bundle:funcs/messanger.lambda": "npx projen bundle:funcs/messanger.lambda",
+    "bundle:funcs/messanger.lambda:watch": "npx projen bundle:funcs/messanger.lambda:watch",
     "clobber": "npx projen clobber",
     "compat": "npx projen compat",
     "compile": "npx projen compile",
@@ -42,6 +45,7 @@
     "aws-cdk-lib": "2.189.1",
     "commit-and-tag-version": "^12",
     "constructs": "10.0.5",
+    "esbuild": "^0.25.5",
     "eslint": "^9",
     "eslint-import-resolver-typescript": "^4.4.1",
     "eslint-plugin-import": "^2.31.0",
