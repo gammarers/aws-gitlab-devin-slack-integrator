@@ -9,7 +9,26 @@ const project = new awscdk.AwsCdkConstructLibrary({
   name: '@gammarers/aws-gitlab-merge-request-devin-review-slack-messenger',
   projenrcTs: true,
   repositoryUrl: 'https://github.com/gammarers/aws-gitlab-merge-request-devin-review-slack-messenger.git',
-  deps: [],
+  devDeps: [
+    '@types/aws-lambda@^8.10.149',
+    '@slack/web-api@^7.9.2',
+    '@aws-sdk/client-dynamodb@^3.817.0',
+    '@aws-sdk/lib-dynamodb@^3.817.0',
+    'axios@^1.9.0',
+  ],
+  jestOptions: {
+    jestConfig: {
+      // snapshotSerializers: ['<rootDir>/node_modules/@gammarers/jest-aws-cdk-asset-filename-renamer'],
+    },
+    extraCliOptions: ['--silent'],
+  },
+  lambdaOptions: {
+    runtime: awscdk.LambdaRuntime.NODEJS_22_X,
+    bundlingOptions: {
+      externals: ['@aws-sdk/*'],
+      sourcemap: true,
+    },
+  },
   releaseToNpm: false,
   npmAccess: javascript.NpmAccess.PUBLIC,
   minNodeVersion: '20.0.0',
