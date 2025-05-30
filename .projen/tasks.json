@@ -56,7 +56,7 @@
       "description": "Create a JavaScript bundle from src/funcs/messanger.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/funcs/messanger.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/funcs/messanger.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/*"
+          "exec": "esbuild --bundle src/funcs/messanger.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/funcs/messanger.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --sourcemap"
         }
       ]
     },
@@ -65,7 +65,7 @@
       "description": "Continuously update the JavaScript bundle from src/funcs/messanger.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/funcs/messanger.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/funcs/messanger.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --watch"
+          "exec": "esbuild --bundle src/funcs/messanger.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/funcs/messanger.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --sourcemap --watch"
         }
       ]
     },
@@ -263,7 +263,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --updateSnapshot",
+          "exec": "jest --silent --passWithNoTests --updateSnapshot",
           "receiveArgs": true
         },
         {
@@ -311,7 +311,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @stylistic/eslint-plugin @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser commit-and-tag-version esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii projen ts-jest ts-node typescript aws-cdk-lib constructs @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @slack/web-api @types/aws-lambda axios"
+          "exec": "yarn upgrade @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @slack/web-api @stylistic/eslint-plugin @types/aws-lambda @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser axios commit-and-tag-version esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii projen ts-jest ts-node typescript aws-cdk-lib constructs"
         },
         {
           "exec": "npx projen"
