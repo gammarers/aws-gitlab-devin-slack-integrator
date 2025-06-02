@@ -16,7 +16,8 @@ const ddb = DynamoDBDocumentClient.from(ddbClient);
 type Secrets = {
   GitLabSecretToken: string;
   SlackSecretToken: string;
-  GitLabDevinUserIdentifier: string;
+  SlackDevinUserIdentifier: string;
+  GitLabDevinUserIdentifier: number;
 };
 
 const responseHeaders = {
@@ -51,6 +52,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
   }
 
   const payload = JSON.parse(event.body!);
+  console.log(payload);
   let text: string;
   let mrid: string;
 
@@ -58,26 +60,38 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
     case 'merge_request':
       const mr = payload.object_attributes;
       mrid = mr.id as string;
-      text = `Hey <@${secrets.GitLabDevinUserIdentifier}> \n🥳 Merge Request: <${mr.url}|${mr.title}> by ${payload.user.username}\nI have created a MR, please review it. Please review the description of the MR.`;
+      if (mr.assignee_id == secrets.GitLabDevinUserIdentifier) {
+        text = `Hey <@${secrets.SlackDevinUserIdentifier}> \n🥳 Merge Request: <${mr.url}|${mr.title}> by ${payload.user.username}\nI have created a MR, please review it. Please review the description of the MR.`;
 
-      // MR投稿 → Slack へ message を投げ、ts を取得して保存
-      const slackClient = new WebClient(secrets.SlackSecretToken);
-      const res = await slackClient.chat.postMessage({ channel: channelId, text });
-      const ts = res.ts;
-      if (ts) {
-        await ddb.send(new PutCommand({
-          TableName: TABLE_NAME,
-          Item: { mrid, threadTs: ts },
-        }));
+        // MR投稿 → Slack へ message を投げ、ts を取得して保存
+        const slackClient = new WebClient(secrets.SlackSecretToken);
+        const res = await slackClient.chat.postMessage({ channel: channelId, text });
+        const ts = res.ts;
+        if (ts) {
+          await ddb.send(new PutCommand({
+            TableName: TABLE_NAME,
+            Item: { mrid, threadTs: ts },
+          }));
+        }
+        return {
+          headers: responseHeaders,
+          statusCode: 200,
+          body: JSON.stringify({
+            message: 'OK',
+            detail: 'Created a MR',
+          }),
+        };
+      } else {
+        return {
+          headers: responseHeaders,
+          statusCode: 200,
+          body: JSON.stringify({
+            message: 'OK',
+            detail: 'This request went through (Not assigned to devin).',
+          }),
+        };
       }
-      return {
-        headers: responseHeaders,
-        statusCode: 200,
-        body: JSON.stringify({
-          message: 'OK',
-          detail: 'Created a MR',
-        }),
-      };
+
     default:
       return { statusCode: 400, body: 'Event ignored' };
   }
