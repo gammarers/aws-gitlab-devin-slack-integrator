@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { WebClient } from '@slack/web-api';
 import { APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import axios from 'axios';
@@ -59,7 +59,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
   const slackClient = new WebClient(secrets.SlackSecretToken);
 
   switch (payload.object_kind) {
-    case 'merge_request':
+    case 'merge_request': {
       const mr = payload.object_attributes;
       const action = mr.action as string;
       const assignee = mr.assignee_id as number;
@@ -85,37 +85,73 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
             detail: 'Created a MR',
           }),
         };
-      } else {
+      }
+      return {
+        headers: responseHeaders,
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'OK',
+          detail: 'This request went through (Not assigned to devin).',
+        }),
+      };
+    }
+    case 'note': {
+      const comment = payload.object_attributes;
+      if (comment.noteable_type === 'MergeRequest') {
+        mrid = payload.merge_request.id as string;
+        const author = comment.author_id as number;
+        if (author != secrets.GitLabDevinUserIdentifier) {
+          // コメント時は既存の threadTs を取得して thread_ts に指定
+          const getRes = await ddb.send(new GetCommand({
+            TableName: TABLE_NAME,
+            Key: { mrid },
+          }));
+          const threadTs = getRes.Item?.threadTs;
+          if (threadTs) {
+            text = `🗨️ Comment on MR <${payload.merge_request.url}|${payload.merge_request.title}> by ${payload.user.username}:\n>Commented on MR. Please check the contents of the comment and conduct a re-review.`;
+            await slackClient.chat.postMessage({
+              channel: channelId,
+              thread_ts: threadTs,
+              text,
+            });
+            return {
+              headers: responseHeaders,
+              statusCode: 200,
+              body: JSON.stringify({
+                message: 'OK',
+                detail: 'Commented a MR',
+              }),
+            };
+          }
+          return {
+            headers: responseHeaders,
+            statusCode: 200,
+            body: JSON.stringify({
+              message: 'OK',
+              detail: 'This request went through (Not Found a MR timestamp).',
+            }),
+          };
+        }
         return {
           headers: responseHeaders,
           statusCode: 200,
           body: JSON.stringify({
             message: 'OK',
-            detail: 'This request went through (Not assigned to devin).',
+            detail: 'This request went through (Commentd from Devin).',
           }),
         };
       }
-      //    case 'note':
-      //      const mr = payload.object_attributes;
-      //      if (mr.noteable_type === 'MergeRequest') {
-      //        mrid = payload.merge_request.id.toString();
-      //        const note = payload.object_attributes;
-      //
-      //        // コメント時は既存の threadTs を取得して thread_ts に指定
-      //        const getRes = await ddb.send(new GetCommand({
-      //          TableName: TABLE_NAME,
-      //          Key: { mrid },
-      //        }));
-      //        const threadTs = getRes.Item?.threadTs;
-      //
-      //        text = `🗨️ Comment on MR <${payload.merge_request.url}|${payload.merge_request.title}> by ${payload.user.username}:\n>${note.note}`;
-      //        await slackClient.chat.postMessage({
-      //          channel: channelId,
-      //          thread_ts: threadTs,
-      //          text,
-      //        });
-      //      }
-    default:
+      return {
+        headers: responseHeaders,
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'OK',
+          detail: 'This request went through (Not a MR comment).',
+        }),
+      };
+    }
+    default: {
       return { statusCode: 400, body: 'Event ignored' };
+    }
   }
 };
