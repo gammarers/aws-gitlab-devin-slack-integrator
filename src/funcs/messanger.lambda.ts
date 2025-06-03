@@ -56,15 +56,19 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
   let text: string;
   let mrid: string;
 
+  const slackClient = new WebClient(secrets.SlackSecretToken);
+
   switch (payload.object_kind) {
     case 'merge_request':
       const mr = payload.object_attributes;
+      const action = mr.action as string;
+      const assignee = mr.assignee_id as number;
+
       mrid = mr.id as string;
-      if (mr.assignee_id == secrets.GitLabDevinUserIdentifier) {
+      if (assignee == secrets.GitLabDevinUserIdentifier && action == 'open') {
         text = `Hey <@${secrets.SlackDevinUserIdentifier}> \n🥳 Merge Request: <${mr.url}|${mr.title}> by ${payload.user.username}\nI have created a MR, please review it. Please review the description of the MR.`;
 
         // MR投稿 → Slack へ message を投げ、ts を取得して保存
-        const slackClient = new WebClient(secrets.SlackSecretToken);
         const res = await slackClient.chat.postMessage({ channel: channelId, text });
         const ts = res.ts;
         if (ts) {
@@ -91,7 +95,26 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
           }),
         };
       }
-
+      //    case 'note':
+      //      const mr = payload.object_attributes;
+      //      if (mr.noteable_type === 'MergeRequest') {
+      //        mrid = payload.merge_request.id.toString();
+      //        const note = payload.object_attributes;
+      //
+      //        // コメント時は既存の threadTs を取得して thread_ts に指定
+      //        const getRes = await ddb.send(new GetCommand({
+      //          TableName: TABLE_NAME,
+      //          Key: { mrid },
+      //        }));
+      //        const threadTs = getRes.Item?.threadTs;
+      //
+      //        text = `🗨️ Comment on MR <${payload.merge_request.url}|${payload.merge_request.title}> by ${payload.user.username}:\n>${note.note}`;
+      //        await slackClient.chat.postMessage({
+      //          channel: channelId,
+      //          thread_ts: threadTs,
+      //          text,
+      //        });
+      //      }
     default:
       return { statusCode: 400, body: 'Event ignored' };
   }

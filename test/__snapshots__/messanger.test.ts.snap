@@ -110,7 +110,7 @@ exports[`Subscription Testing Should match snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "ee8171f446f7ec6fccb2ea281fd75ae656ba33e344e92b093546b2aa4d37c8a5.zip",
+          "S3Key": "2228fed1353f6aeee1e6654bf7d602bcb7efa89c19bd618389bc568c523321dd.zip",
         },
         "Description": "Send Slack message function",
         "Environment": {
