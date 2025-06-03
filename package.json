@@ -1,8 +1,8 @@
 {
-  "name": "@gammarers/aws-gitlab-merge-request-devin-review-slack-messenger",
+  "name": "@gammarers/aws-gitlab-devin-slack-integrator",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gammarers/aws-gitlab-merge-request-devin-review-slack-messenger.git"
+    "url": "https://github.com/gammarers/aws-gitlab-devin-slack-integrator.git"
   },
   "scripts": {
     "build": "npx projen build",

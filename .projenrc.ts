@@ -6,9 +6,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
   defaultReleaseBranch: 'main',
   typescriptVersion: '5.8.x',
   jsiiVersion: '5.8.x',
-  name: '@gammarers/aws-gitlab-merge-request-devin-review-slack-messenger',
+  name: '@gammarers/aws-gitlab-devin-slack-integrator',
   projenrcTs: true,
-  repositoryUrl: 'https://github.com/gammarers/aws-gitlab-merge-request-devin-review-slack-messenger.git',
+  repositoryUrl: 'https://github.com/gammarers/aws-gitlab-devin-slack-integrator.git',
   devDeps: [
     '@types/aws-lambda@^8.10.149',
     '@slack/web-api@^7.9.2',
