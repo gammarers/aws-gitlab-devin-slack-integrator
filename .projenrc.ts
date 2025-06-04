@@ -15,10 +15,11 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@aws-sdk/client-dynamodb@^3.817.0',
     '@aws-sdk/lib-dynamodb@^3.817.0',
     'axios@^1.9.0',
+    '@gammarers/jest-aws-cdk-asset-filename-renamer@^0.5.50',
   ],
   jestOptions: {
     jestConfig: {
-      // snapshotSerializers: ['<rootDir>/node_modules/@gammarers/jest-aws-cdk-asset-filename-renamer'],
+      snapshotSerializers: ['@gammarers/jest-aws-cdk-asset-filename-renamer'],
     },
     extraCliOptions: ['--silent'],
   },

@@ -39,6 +39,7 @@
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "^3.817.0",
     "@aws-sdk/lib-dynamodb": "^3.817.0",
+    "@gammarers/jest-aws-cdk-asset-filename-renamer": "^0.5.50",
     "@slack/web-api": "^7.9.2",
     "@stylistic/eslint-plugin": "^2",
     "@types/aws-lambda": "^8.10.149",
@@ -84,6 +85,9 @@
   "version": "0.0.0",
   "jest": {
     "coverageProvider": "v8",
+    "snapshotSerializers": [
+      "@gammarers/jest-aws-cdk-asset-filename-renamer"
+    ],
     "testMatch": [
       "<rootDir>/@(src|test)/**/*(*.)@(spec|test).ts?(x)",
       "<rootDir>/@(src|test)/**/__tests__/**/*.ts?(x)",

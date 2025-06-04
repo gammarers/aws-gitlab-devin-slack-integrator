@@ -11,6 +11,11 @@
       "type": "build"
     },
     {
+      "name": "@gammarers/jest-aws-cdk-asset-filename-renamer",
+      "version": "^0.5.50",
+      "type": "build"
+    },
+    {
       "name": "@slack/web-api",
       "version": "^7.9.2",
       "type": "build"

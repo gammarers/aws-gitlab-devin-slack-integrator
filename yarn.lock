@@ -1013,6 +1013,11 @@
     "@eslint/core" "^0.14.0"
     levn "^0.4.1"
 
+"@gammarers/jest-aws-cdk-asset-filename-renamer@^0.5.50":
+  version "0.5.50"
+  resolved "https://registry.yarnpkg.com/@gammarers/jest-aws-cdk-asset-filename-renamer/-/jest-aws-cdk-asset-filename-renamer-0.5.50.tgz#1e781679fe3c0af321f86055f10c3d034758a2d1"
+  integrity sha512-EQnU48tAMpXliv8MMvkcKFJgbYExrn7hBoyyL48UkY51aRCWtMBaLQ9tK9yVd0QooeMQv0xSGT5qj2rKI8BD4A==
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.1.tgz#17c55ca7d426733fe3c561906b8173c336b40a77"
