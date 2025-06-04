@@ -1,13 +1,13 @@
 import { App, Stack } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
-import { GitLabMergeRequestDevinReviewSlackMessanger } from '../src';
+import { GitLabDevinSlackIntegrator } from '../src';
 
 describe('Subscription Testing', () => {
 
   const app = new App();
   const stack = new Stack(app, 'TestingStack');
 
-  new GitLabMergeRequestDevinReviewSlackMessanger(stack, 'GitLabMergeRequestDevinReviewSlackMessanger', {
+  new GitLabDevinSlackIntegrator(stack, 'GitLabDevinSlackIntegrator', {
     secretName: 'foobar',
   });
 

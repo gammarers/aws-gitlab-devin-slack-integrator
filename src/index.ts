@@ -6,14 +6,14 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
-import { MessangerFunction } from './funcs/messanger-function';
+import { IntegratorFunction } from './funcs/integrator-function';
 
-export interface GitLabMergeRequestDevinReviewSlackMessangerProps {
+export interface GitLabDevinSlackIntegratorProps {
   readonly secretName: string;
 }
 
-export class GitLabMergeRequestDevinReviewSlackMessanger extends Construct {
-  constructor(scope: Construct, id: string, props: GitLabMergeRequestDevinReviewSlackMessangerProps) {
+export class GitLabDevinSlackIntegrator extends Construct {
+  constructor(scope: Construct, id: string, props: GitLabDevinSlackIntegratorProps) {
     super(scope, id);
 
     // 👇 Get account & region
@@ -29,7 +29,7 @@ export class GitLabMergeRequestDevinReviewSlackMessanger extends Construct {
     });
 
     // GitLab Webhook Lambda
-    const messangerFunction = new MessangerFunction(this, 'MessangerFunction', {
+    const messangerFunction = new IntegratorFunction(this, 'IntegratorFunction', {
       description: 'Send Slack message function',
       architecture: lambda.Architecture.ARM_64,
       role: new iam.Role(this, 'MessangerFunctionExecutionRole', {

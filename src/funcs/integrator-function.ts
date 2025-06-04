@@ -4,22 +4,22 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 
 /**
- * Props for MessangerFunction
+ * Props for IntegratorFunction
  */
-export interface MessangerFunctionProps extends lambda.FunctionOptions {
+export interface IntegratorFunctionProps extends lambda.FunctionOptions {
 }
 
 /**
- * An AWS Lambda function which executes src/funcs/messanger.
+ * An AWS Lambda function which executes src/funcs/integrator.
  */
-export class MessangerFunction extends lambda.Function {
-  constructor(scope: Construct, id: string, props?: MessangerFunctionProps) {
+export class IntegratorFunction extends lambda.Function {
+  constructor(scope: Construct, id: string, props?: IntegratorFunctionProps) {
     super(scope, id, {
-      description: 'src/funcs/messanger.lambda.ts',
+      description: 'src/funcs/integrator.lambda.ts',
       ...props,
       runtime: new lambda.Runtime('nodejs22.x', lambda.RuntimeFamily.NODEJS),
       handler: 'index.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../assets/funcs/messanger.lambda')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../assets/funcs/integrator.lambda')),
     });
     this.addEnvironment('AWS_NODEJS_CONNECTION_REUSE_ENABLED', '1', { removeInEdge: true });
   }
