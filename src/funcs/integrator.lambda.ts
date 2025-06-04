@@ -65,26 +65,54 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
       const assignee = mr.assignee_id as number;
 
       mrid = mr.id as string;
-      if (assignee == secrets.GitLabDevinUserIdentifier && action == 'open') {
+      if (assignee == secrets.GitLabDevinUserIdentifier) {
         text = `Hey <@${secrets.SlackDevinUserIdentifier}> \n🥳 Merge Request: <${mr.url}|${mr.title}> by ${payload.user.username}\nI have created a MR, please review it. Please review the description of the MR.`;
+        if (action == 'open') {
 
-        // MR投稿 → Slack へ message を投げ、ts を取得して保存
-        const res = await slackClient.chat.postMessage({ channel: channelId, text });
-        const ts = res.ts;
-        if (ts) {
-          await ddb.send(new PutCommand({
-            TableName: TABLE_NAME,
-            Item: { mrid, threadTs: ts },
-          }));
+          // MR投稿 → Slack へ message を投げ、ts を取得して保存
+          const res = await slackClient.chat.postMessage({ channel: channelId, text });
+          const ts = res.ts;
+          if (ts) {
+            await ddb.send(new PutCommand({
+              TableName: TABLE_NAME,
+              Item: { mrid, threadTs: ts },
+            }));
+          }
+          return {
+            headers: responseHeaders,
+            statusCode: 200,
+            body: JSON.stringify({
+              message: 'OK',
+              detail: 'Created a MR(open)',
+            }),
+          };
         }
-        return {
-          headers: responseHeaders,
-          statusCode: 200,
-          body: JSON.stringify({
-            message: 'OK',
-            detail: 'Created a MR',
-          }),
-        };
+        if (action == 'update') {
+          const getRes = await ddb.send(new GetCommand({
+            TableName: TABLE_NAME,
+            Key: { mrid },
+          }));
+          const threadTs = getRes.Item?.threadTs;
+          // updateでも対象のMRが登録された無かったら登録する
+          if (!threadTs) {
+            const res = await slackClient.chat.postMessage({ channel: channelId, text });
+            const ts = res.ts;
+            if (ts) {
+              await ddb.send(new PutCommand({
+                TableName: TABLE_NAME,
+                Item: { mrid, threadTs: ts },
+              }));
+            }
+            return {
+              headers: responseHeaders,
+              statusCode: 200,
+              body: JSON.stringify({
+                message: 'OK',
+                detail: 'Created a MR(update)',
+              }),
+            };
+          }
+        }
       }
       return {
         headers: responseHeaders,
