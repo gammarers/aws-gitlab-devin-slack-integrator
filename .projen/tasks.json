@@ -47,25 +47,25 @@
       "description": "Prepare assets",
       "steps": [
         {
-          "spawn": "bundle:funcs/messanger.lambda"
+          "spawn": "bundle:funcs/integrator.lambda"
         }
       ]
     },
-    "bundle:funcs/messanger.lambda": {
-      "name": "bundle:funcs/messanger.lambda",
-      "description": "Create a JavaScript bundle from src/funcs/messanger.lambda.ts",
+    "bundle:funcs/integrator.lambda": {
+      "name": "bundle:funcs/integrator.lambda",
+      "description": "Create a JavaScript bundle from src/funcs/integrator.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/funcs/messanger.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/funcs/messanger.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --sourcemap"
+          "exec": "esbuild --bundle src/funcs/integrator.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/funcs/integrator.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --sourcemap"
         }
       ]
     },
-    "bundle:funcs/messanger.lambda:watch": {
-      "name": "bundle:funcs/messanger.lambda:watch",
-      "description": "Continuously update the JavaScript bundle from src/funcs/messanger.lambda.ts",
+    "bundle:funcs/integrator.lambda:watch": {
+      "name": "bundle:funcs/integrator.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/funcs/integrator.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/funcs/messanger.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/funcs/messanger.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --sourcemap --watch"
+          "exec": "esbuild --bundle src/funcs/integrator.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/funcs/integrator.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --sourcemap --watch"
         }
       ]
     },

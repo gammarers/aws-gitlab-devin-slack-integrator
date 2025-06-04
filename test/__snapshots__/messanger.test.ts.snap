@@ -77,7 +77,7 @@ exports[`Subscription Testing Should match snapshot 1`] = `
     },
   },
   "Resources": {
-    "GitLabMergeRequestDevinReviewSlackMessangerGitLabMargeRquestTimestampTable52201E76": {
+    "GitLabDevinSlackIntegratorGitLabMargeRquestTimestampTableBBABBA12": {
       "DeletionPolicy": "Delete",
       "Properties": {
         "AttributeDefinitions": [
@@ -97,10 +97,10 @@ exports[`Subscription Testing Should match snapshot 1`] = `
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Delete",
     },
-    "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunction0486EA84": {
+    "GitLabDevinSlackIntegratorIntegratorFunction52A26E58": {
       "DependsOn": [
-        "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunctionExecutionRoleDefaultPolicy7906E3A5",
-        "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunctionExecutionRoleF1483720",
+        "GitLabDevinSlackIntegratorMessangerFunctionExecutionRoleDefaultPolicy5A37BFEA",
+        "GitLabDevinSlackIntegratorMessangerFunctionExecutionRole0AB70352",
       ],
       "Properties": {
         "Architectures": [
@@ -127,7 +127,7 @@ exports[`Subscription Testing Should match snapshot 1`] = `
             "SSM_PARAMETER_STORE_TIMEOUT_MILLIS": "0",
             "SSM_PARAMETER_STORE_TTL": "300",
             "TABLE_NAME": {
-              "Ref": "GitLabMergeRequestDevinReviewSlackMessangerGitLabMargeRquestTimestampTable52201E76",
+              "Ref": "GitLabDevinSlackIntegratorGitLabMargeRquestTimestampTableBBABBA12",
             },
           },
         },
@@ -147,13 +147,13 @@ exports[`Subscription Testing Should match snapshot 1`] = `
           "ApplicationLogLevel": "INFO",
           "LogFormat": "JSON",
           "LogGroup": {
-            "Ref": "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunctionLogGroup9C69643E",
+            "Ref": "GitLabDevinSlackIntegratorMessangerFunctionLogGroup04C86C5B",
           },
           "SystemLogLevel": "INFO",
         },
         "Role": {
           "Fn::GetAtt": [
-            "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunctionExecutionRoleF1483720",
+            "GitLabDevinSlackIntegratorMessangerFunctionExecutionRole0AB70352",
             "Arn",
           ],
         },
@@ -162,51 +162,7 @@ exports[`Subscription Testing Should match snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunctionExecutionRoleDefaultPolicy7906E3A5": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:Query",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:ConditionCheckItem",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem",
-                "dynamodb:UpdateItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:DescribeTable",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::GetAtt": [
-                    "GitLabMergeRequestDevinReviewSlackMessangerGitLabMargeRquestTimestampTable52201E76",
-                    "Arn",
-                  ],
-                },
-                {
-                  "Ref": "AWS::NoValue",
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunctionExecutionRoleDefaultPolicy7906E3A5",
-        "Roles": [
-          {
-            "Ref": "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunctionExecutionRoleF1483720",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunctionExecutionRoleF1483720": {
+    "GitLabDevinSlackIntegratorMessangerFunctionExecutionRole0AB70352": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -271,7 +227,51 @@ exports[`Subscription Testing Should match snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunctionLogGroup9C69643E": {
+    "GitLabDevinSlackIntegratorMessangerFunctionExecutionRoleDefaultPolicy5A37BFEA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "GitLabDevinSlackIntegratorGitLabMargeRquestTimestampTableBBABBA12",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Ref": "AWS::NoValue",
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GitLabDevinSlackIntegratorMessangerFunctionExecutionRoleDefaultPolicy5A37BFEA",
+        "Roles": [
+          {
+            "Ref": "GitLabDevinSlackIntegratorMessangerFunctionExecutionRole0AB70352",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GitLabDevinSlackIntegratorMessangerFunctionLogGroup04C86C5B": {
       "DeletionPolicy": "RetainExceptOnCreate",
       "Properties": {
         "RetentionInDays": 90,
@@ -279,27 +279,27 @@ exports[`Subscription Testing Should match snapshot 1`] = `
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Retain",
     },
-    "GitLabMergeRequestDevinReviewSlackMessangerSlackGitlabIntegrationAPI2BAAC04C": {
+    "GitLabDevinSlackIntegratorSlackGitlabIntegrationAPIACE591CF": {
       "Properties": {
         "Name": "Slack GitLab Integration API",
         "ProtocolType": "HTTP",
       },
       "Type": "AWS::ApiGatewayV2::Api",
     },
-    "GitLabMergeRequestDevinReviewSlackMessangerSlackGitlabIntegrationAPIDefaultStage09489DC7": {
+    "GitLabDevinSlackIntegratorSlackGitlabIntegrationAPIDefaultStageEB7B5A57": {
       "Properties": {
         "ApiId": {
-          "Ref": "GitLabMergeRequestDevinReviewSlackMessangerSlackGitlabIntegrationAPI2BAAC04C",
+          "Ref": "GitLabDevinSlackIntegratorSlackGitlabIntegrationAPIACE591CF",
         },
         "AutoDeploy": true,
         "StageName": "$default",
       },
       "Type": "AWS::ApiGatewayV2::Stage",
     },
-    "GitLabMergeRequestDevinReviewSlackMessangerSlackGitlabIntegrationAPIPOSTgitlabmergerequestchannelA0220D6B": {
+    "GitLabDevinSlackIntegratorSlackGitlabIntegrationAPIPOSTgitlabmergerequestchannelF8DDA723": {
       "Properties": {
         "ApiId": {
-          "Ref": "GitLabMergeRequestDevinReviewSlackMessangerSlackGitlabIntegrationAPI2BAAC04C",
+          "Ref": "GitLabDevinSlackIntegratorSlackGitlabIntegrationAPIACE591CF",
         },
         "AuthorizationType": "NONE",
         "RouteKey": "POST /gitlab/merge/request/{channel}",
@@ -309,7 +309,7 @@ exports[`Subscription Testing Should match snapshot 1`] = `
             [
               "integrations/",
               {
-                "Ref": "GitLabMergeRequestDevinReviewSlackMessangerSlackGitlabIntegrationAPIPOSTgitlabmergerequestchannelGitlabWebhookIntegrationA1B552DC",
+                "Ref": "GitLabDevinSlackIntegratorSlackGitlabIntegrationAPIPOSTgitlabmergerequestchannelGitlabWebhookIntegrationDE8C57BC",
               },
             ],
           ],
@@ -317,15 +317,15 @@ exports[`Subscription Testing Should match snapshot 1`] = `
       },
       "Type": "AWS::ApiGatewayV2::Route",
     },
-    "GitLabMergeRequestDevinReviewSlackMessangerSlackGitlabIntegrationAPIPOSTgitlabmergerequestchannelGitlabWebhookIntegrationA1B552DC": {
+    "GitLabDevinSlackIntegratorSlackGitlabIntegrationAPIPOSTgitlabmergerequestchannelGitlabWebhookIntegrationDE8C57BC": {
       "Properties": {
         "ApiId": {
-          "Ref": "GitLabMergeRequestDevinReviewSlackMessangerSlackGitlabIntegrationAPI2BAAC04C",
+          "Ref": "GitLabDevinSlackIntegratorSlackGitlabIntegrationAPIACE591CF",
         },
         "IntegrationType": "AWS_PROXY",
         "IntegrationUri": {
           "Fn::GetAtt": [
-            "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunction0486EA84",
+            "GitLabDevinSlackIntegratorIntegratorFunction52A26E58",
             "Arn",
           ],
         },
@@ -333,12 +333,12 @@ exports[`Subscription Testing Should match snapshot 1`] = `
       },
       "Type": "AWS::ApiGatewayV2::Integration",
     },
-    "GitLabMergeRequestDevinReviewSlackMessangerSlackGitlabIntegrationAPIPOSTgitlabmergerequestchannelGitlabWebhookIntegrationPermission7EBDC253": {
+    "GitLabDevinSlackIntegratorSlackGitlabIntegrationAPIPOSTgitlabmergerequestchannelGitlabWebhookIntegrationPermission92325168": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "GitLabMergeRequestDevinReviewSlackMessangerMessangerFunction0486EA84",
+            "GitLabDevinSlackIntegratorIntegratorFunction52A26E58",
             "Arn",
           ],
         },
@@ -361,7 +361,7 @@ exports[`Subscription Testing Should match snapshot 1`] = `
               },
               ":",
               {
-                "Ref": "GitLabMergeRequestDevinReviewSlackMessangerSlackGitlabIntegrationAPI2BAAC04C",
+                "Ref": "GitLabDevinSlackIntegratorSlackGitlabIntegrationAPIACE591CF",
               },
               "/*/*/gitlab/merge/request/{channel}",
             ],
