@@ -24,6 +24,14 @@ const responseHeaders = {
   'Content-Type': 'application/json',
 };
 
+const getSlackThreadTimeStamp = (async(mrid: number) => {
+  const response = await ddb.send(new GetCommand({
+    TableName: TABLE_NAME,
+    Key: { mrid },
+  }));
+  return response.Item?.threadTs;
+});
+
 export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatewayProxyResultV2> => {
   // パスパラメータからチャンネルID取得
   const channelId = event.pathParameters?.channel;
@@ -54,7 +62,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
   const payload = JSON.parse(event.body!);
   console.log(payload);
   let text: string;
-  let mrid: string;
+  let mrid: number;
 
   const slackClient = new WebClient(secrets.SlackSecretToken);
 
@@ -64,27 +72,51 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
       const action = mr.action as string;
       const assignee = mr.assignee_id as number;
 
-      mrid = mr.id as string;
-      if (assignee == secrets.GitLabDevinUserIdentifier && action == 'open') {
+      mrid = mr.id as number;
+      if (assignee == secrets.GitLabDevinUserIdentifier) {
         text = `Hey <@${secrets.SlackDevinUserIdentifier}> \n🥳 Merge Request: <${mr.url}|${mr.title}> by ${payload.user.username}\nI have created a MR, please review it. Please review the description of the MR.`;
+        if (action == 'open') {
 
-        // MR投稿 → Slack へ message を投げ、ts を取得して保存
-        const res = await slackClient.chat.postMessage({ channel: channelId, text });
-        const ts = res.ts;
-        if (ts) {
-          await ddb.send(new PutCommand({
-            TableName: TABLE_NAME,
-            Item: { mrid, threadTs: ts },
-          }));
+          // MR投稿 → Slack へ message を投げ、ts を取得して保存
+          const res = await slackClient.chat.postMessage({ channel: channelId, text });
+          const ts = res.ts;
+          if (ts) {
+            await ddb.send(new PutCommand({
+              TableName: TABLE_NAME,
+              Item: { mrid, threadTs: ts },
+            }));
+          }
+          return {
+            headers: responseHeaders,
+            statusCode: 200,
+            body: JSON.stringify({
+              message: 'OK',
+              detail: 'Created a MR(open)',
+            }),
+          };
         }
-        return {
-          headers: responseHeaders,
-          statusCode: 200,
-          body: JSON.stringify({
-            message: 'OK',
-            detail: 'Created a MR',
-          }),
-        };
+        if (action == 'update') {
+          const threadTs = await getSlackThreadTimeStamp(mrid);
+          // updateでも対象のMRが登録された無かったら登録する
+          if (!threadTs) {
+            const res = await slackClient.chat.postMessage({ channel: channelId, text });
+            const ts = res.ts;
+            if (ts) {
+              await ddb.send(new PutCommand({
+                TableName: TABLE_NAME,
+                Item: { mrid, threadTs: ts },
+              }));
+            }
+            return {
+              headers: responseHeaders,
+              statusCode: 200,
+              body: JSON.stringify({
+                message: 'OK',
+                detail: 'Created a MR(update)',
+              }),
+            };
+          }
+        }
       }
       return {
         headers: responseHeaders,
@@ -98,15 +130,11 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
     case 'note': {
       const comment = payload.object_attributes;
       if (comment.noteable_type === 'MergeRequest') {
-        mrid = payload.merge_request.id as string;
+        mrid = payload.merge_request.id as number;
         const author = comment.author_id as number;
         if (author != secrets.GitLabDevinUserIdentifier) {
           // コメント時は既存の threadTs を取得して thread_ts に指定
-          const getRes = await ddb.send(new GetCommand({
-            TableName: TABLE_NAME,
-            Key: { mrid },
-          }));
-          const threadTs = getRes.Item?.threadTs;
+          const threadTs = await getSlackThreadTimeStamp(mrid);
           if (threadTs) {
             text = `🗨️ Comment on MR <${payload.merge_request.url}|${payload.merge_request.title}> by ${payload.user.username}:\n>Commented on MR. Please check the contents of the comment and conduct a re-review.`;
             await slackClient.chat.postMessage({
