@@ -74,7 +74,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
 
       mrid = mr.id as number;
       if (assignee == secrets.GitLabDevinUserIdentifier) {
-        text = `Hey <@${secrets.SlackDevinUserIdentifier}> \n🥳 Merge Request: <${mr.url}|${mr.title}> by ${payload.user.username}\nI have created a MR, please review it. Please review the description of the MR.`;
+        text = `Hey <@${secrets.SlackDevinUserIdentifier}> \n🥳 Merge Request: <${mr.url}|${mr.title}> by ${payload.user.name}\nI have created a MR, please review it. Please review the description of the MR.`;
         if (action == 'open') {
 
           // MR投稿 → Slack へ message を投げ、ts を取得して保存
@@ -136,7 +136,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
           // コメント時は既存の threadTs を取得して thread_ts に指定
           const threadTs = await getSlackThreadTimeStamp(mrid);
           if (threadTs) {
-            text = `🗨️ Comment on MR <${payload.merge_request.url}|${payload.merge_request.title}> by ${payload.user.username}:\n>Commented on MR. Please check the contents of the comment and conduct a re-review.`;
+            text = `🗨️ Comment on MR <${payload.merge_request.url}|${payload.merge_request.title}> by ${payload.user.name}:\n>Commented on MR. Please check the contents of the comment and conduct a re-review.`;
             await slackClient.chat.postMessage({
               channel: channelId,
               thread_ts: threadTs,
