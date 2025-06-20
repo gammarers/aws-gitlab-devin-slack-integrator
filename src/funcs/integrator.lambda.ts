@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DeleteCommand, DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { WebClient } from '@slack/web-api';
 import { APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import axios from 'axios';
@@ -30,6 +30,24 @@ const getSlackThreadTimeStamp = (async(mrid: number) => {
     Key: { mrid },
   }));
   return response.Item?.threadTs;
+});
+
+const putSlackThreadTimeStamp = (async(mrid: number, ts: string) => {
+  const response = await ddb.send(new PutCommand({
+    TableName: TABLE_NAME,
+    Item: { mrid, threadTs: ts },
+  }));
+  // return response.Item?.threadTs;
+  console.log(response);
+});
+
+const deleteSlackThreadTimeStamp = (async(mrid: number) => {
+  const response = await ddb.send(new DeleteCommand({
+    TableName: TABLE_NAME,
+    Key: { mrid },
+  }));
+  // return response.Item?.threadTs;
+  console.log(response);
 });
 
 export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatewayProxyResultV2> => {
@@ -81,10 +99,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
           const res = await slackClient.chat.postMessage({ channel: channelId, text });
           const ts = res.ts;
           if (ts) {
-            await ddb.send(new PutCommand({
-              TableName: TABLE_NAME,
-              Item: { mrid, threadTs: ts },
-            }));
+            await putSlackThreadTimeStamp(mrid, ts);
           }
           return {
             headers: responseHeaders,
@@ -102,10 +117,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
             const res = await slackClient.chat.postMessage({ channel: channelId, text });
             const ts = res.ts;
             if (ts) {
-              await ddb.send(new PutCommand({
-                TableName: TABLE_NAME,
-                Item: { mrid, threadTs: ts },
-              }));
+              await putSlackThreadTimeStamp(mrid, ts);
             }
             return {
               headers: responseHeaders,
@@ -116,6 +128,10 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
               }),
             };
           }
+        }
+        if (action == 'merged' && mr.state == 'merged') {
+          // レコードを消す
+          await deleteSlackThreadTimeStamp(mrid);
         }
       }
       return {
