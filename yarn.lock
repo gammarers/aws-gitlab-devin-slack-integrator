@@ -1021,9 +1021,9 @@
     levn "^0.4.1"
 
 "@gammarers/jest-aws-cdk-asset-filename-renamer@^0.5.50":
-  version "0.5.52"
-  resolved "https://registry.yarnpkg.com/@gammarers/jest-aws-cdk-asset-filename-renamer/-/jest-aws-cdk-asset-filename-renamer-0.5.52.tgz#91d6a1e774c2bbf1bf5d4d78d89efef52122bca7"
-  integrity sha512-G581ZeNu4yeXL2dVDjMQZUK6D5Y4VQ+lsBcrMvJ9xz9mokSAO8rNMwNj41roLjUBfChCgeRp16m+qiJy8GmTTg==
+  version "0.5.53"
+  resolved "https://registry.yarnpkg.com/@gammarers/jest-aws-cdk-asset-filename-renamer/-/jest-aws-cdk-asset-filename-renamer-0.5.53.tgz#b31472d70288e11542d57131fb7cee5d0adb1b90"
+  integrity sha512-aNOU8bJ2ws8vQWV6nMRzSI/xkBRvl0jX15gEwnowJLC8m5DhL3wiTWIFKLWQFN2m00IvZoLgI7Vhh7BAKBkHog==
 
 "@humanfs/core@^0.19.1":
   version "0.19.1"
@@ -1422,9 +1422,9 @@
   integrity sha512-n0EGm7ENQRxlXbgKSrQZL69grzg1gHLAVd+GlRVQJ1NSORo0FrApR7wql/gaKdu2n4TO83Sq/AmeUOqD60aXUA==
 
 "@slack/web-api@^7.9.2":
-  version "7.9.2"
-  resolved "https://registry.yarnpkg.com/@slack/web-api/-/web-api-7.9.2.tgz#c996354f467d64c4d3c4e77ab55f42dcf98cf2d0"
-  integrity sha512-3HoDwV6+ZSTfV+DsbnUd82GlZY0a+DPXuHQHpxWTqgxjM3JWZyGiwR+ov3d2M16pWiMzA+l58UJ5lm1znGq0yA==
+  version "7.9.3"
+  resolved "https://registry.yarnpkg.com/@slack/web-api/-/web-api-7.9.3.tgz#50d914900314771288961a8f626bf7d6485d58e6"
+  integrity sha512-xjnoldVJyoUe61Ltqjr2UVYBolcsTpp5ottqzSI3l41UCaJgHSHIOpGuYps+nhLFvDfGGpDGUeQ7BWiq3+ypqA==
   dependencies:
     "@slack/logger" "^4.0.0"
     "@slack/types" "^2.9.0"
@@ -3221,9 +3221,9 @@ ejs@^3.1.10:
     jake "^10.8.5"
 
 electron-to-chromium@^1.5.160:
-  version "1.5.170"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.170.tgz#9f6697de4339e24da8b234e4492a9ecb91f5989c"
-  integrity sha512-GP+M7aeluQo9uAyiTCxgIj/j+PrWhMlY7LFVj8prlsPljd0Fdg9AprlfUi+OCSFWy9Y5/2D/Jrj9HS8Z4rpKWA==
+  version "1.5.171"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.171.tgz#e552b4fd73d4dd941ee4c70ae288a8a39f818726"
+  integrity sha512-scWpzXEJEMrGJa4Y6m/tVotb0WuvNmasv3wWVzUAeCgKU0ToFOhUW6Z+xWnRQANMYGxN4ngJXIThgBJOqzVPCQ==
 
 emittery@^0.13.1:
   version "0.13.1"
