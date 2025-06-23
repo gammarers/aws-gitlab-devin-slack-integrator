@@ -6,3 +6,4 @@
   - meddage post when action update but not found merge request id in table(DynamoDB)
 - GitLab Merge Request Comment to Slack message post
   - ignore devin's comment
+- GiLab Merge Request action merged
