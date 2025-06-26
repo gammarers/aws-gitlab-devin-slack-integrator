@@ -29,7 +29,7 @@ export class GitLabDevinSlackIntegrator extends Construct {
     });
 
     // GitLab Webhook Lambda
-    const messangerFunction = new IntegratorFunction(this, 'IntegratorFunction', {
+    const integratorFunction = new IntegratorFunction(this, 'IntegratorFunction', {
       description: 'Send Slack message function',
       architecture: lambda.Architecture.ARM_64,
       role: new iam.Role(this, 'MessangerFunctionExecutionRole', {
@@ -74,7 +74,7 @@ export class GitLabDevinSlackIntegrator extends Construct {
       }),
     });
     // todo: get/put/deleteの厳密な定義を行う
-    table.grantReadWriteData(messangerFunction);
+    table.grantReadWriteData(integratorFunction);
 
     // HTTP API
     const api = new HttpApi(this, 'SlackGitlabIntegrationAPI', {
@@ -85,7 +85,13 @@ export class GitLabDevinSlackIntegrator extends Construct {
     api.addRoutes({
       path: '/gitlab/merge/request/{channel}',
       methods: [HttpMethod.POST],
-      integration: new integrations.HttpLambdaIntegration('GitlabWebhookIntegration', messangerFunction),
+      integration: new integrations.HttpLambdaIntegration('GitlabWebhookIntegration', integratorFunction),
+    });
+
+    api.addRoutes({
+      path: '/{channel}',
+      methods: [HttpMethod.POST],
+      integration: new integrations.HttpLambdaIntegration('GitlabWebhookIntegration', integratorFunction),
     });
   }
 }
