@@ -87,5 +87,11 @@ export class GitLabDevinSlackIntegrator extends Construct {
       methods: [HttpMethod.POST],
       integration: new integrations.HttpLambdaIntegration('GitlabWebhookIntegration', integratorFunction),
     });
+
+    api.addRoutes({
+      path: '/{channel}',
+      methods: [HttpMethod.POST],
+      integration: new integrations.HttpLambdaIntegration('GitlabWebhookIntegration', integratorFunction),
+    });
   }
 }
