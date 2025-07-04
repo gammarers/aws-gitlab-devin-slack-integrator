@@ -118,6 +118,7 @@ const gitLabDevinSlackIntegratorProps: GitLabDevinSlackIntegratorProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@gammarers/aws-gitlab-devin-slack-integrator.GitLabDevinSlackIntegratorProps.property.secretName">secretName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@gammarers/aws-gitlab-devin-slack-integrator.GitLabDevinSlackIntegratorProps.property.customDomain">customDomain</a></code> | <code>string</code> | *No description.* |
 
 ---
 
@@ -125,6 +126,16 @@ const gitLabDevinSlackIntegratorProps: GitLabDevinSlackIntegratorProps = { ... }
 
 ```typescript
 public readonly secretName: string;
+```
+
+- *Type:* string
+
+---
+
+##### `customDomain`<sup>Optional</sup> <a name="customDomain" id="@gammarers/aws-gitlab-devin-slack-integrator.GitLabDevinSlackIntegratorProps.property.customDomain"></a>
+
+```typescript
+public readonly customDomain: string;
 ```
 
 - *Type:* string
