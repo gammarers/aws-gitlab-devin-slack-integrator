@@ -1026,9 +1026,9 @@
     levn "^0.4.1"
 
 "@gammarers/jest-aws-cdk-asset-filename-renamer@^0.5.50":
-  version "0.5.54"
-  resolved "https://registry.yarnpkg.com/@gammarers/jest-aws-cdk-asset-filename-renamer/-/jest-aws-cdk-asset-filename-renamer-0.5.54.tgz#0ede1056b7c8d2d3a3d16677e214374026523644"
-  integrity sha512-s9ForuwwZXUAR0t7YIvprxhim8zOIQzNfqkQb+LMfSrbDrp2wOK/1B0u+ZtuVy2R2gQfz/1GXsHUkCOUsKkmYA==
+  version "0.5.55"
+  resolved "https://registry.yarnpkg.com/@gammarers/jest-aws-cdk-asset-filename-renamer/-/jest-aws-cdk-asset-filename-renamer-0.5.55.tgz#54e08c18e268cc8dcca99fab09dd1ce10f39a701"
+  integrity sha512-qqnB+M8xZpu85ffMJ6lkpEhQfYNZFu+Uk0KEwOtYG9JKj8UZvqGro2h/iJocyCf+ciDH39fRhSQk3mMSqY+bqw==
 
 "@humanfs/core@^0.19.1":
   version "0.19.1"
