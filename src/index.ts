@@ -10,6 +10,7 @@ import { IntegratorFunction } from './funcs/integrator-function';
 
 export interface GitLabDevinSlackIntegratorProps {
   readonly secretName: string;
+  readonly customDomain?: string;
 }
 
 export class GitLabDevinSlackIntegrator extends Construct {
@@ -53,6 +54,21 @@ export class GitLabDevinSlackIntegrator extends Construct {
               }),
             ],
           }),
+          'write-dynamodb-policy': new iam.PolicyDocument({
+            statements: [
+              new iam.PolicyStatement({
+                effect: iam.Effect.ALLOW,
+                actions: [
+                  'dynamodb:GetItem',
+                  'dynamodb:PutItem',
+                  'dynamodb:DeleteItem',
+                ],
+                resources: [
+                  table.tableArn,
+                ],
+              }),
+            ],
+          }),
         },
       }),
       timeout: Duration.seconds(10),
@@ -74,7 +90,7 @@ export class GitLabDevinSlackIntegrator extends Construct {
       }),
     });
     // todo: get/put/deleteの厳密な定義を行う
-    table.grantReadWriteData(integratorFunction);
+    // table.grantReadWriteData(integratorFunction);
 
     // HTTP API
     const api = new HttpApi(this, 'SlackGitlabIntegrationAPI', {
