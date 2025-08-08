@@ -129,17 +129,35 @@ export const handler: APIGatewayProxyHandlerV2 = async (event): Promise<APIGatew
             };
           }
         }
-        if (action == 'merged' && mr.state == 'merged') {
-          // レコードを消す
-          await deleteSlackThreadTimeStamp(mrid);
+      }
+      const state = mr.state as string;
+      if (action == 'merge' && state == 'merged') {
+        // mainにマージされたら通知する
+        const branch = mr.target_branch;
+        if (branch == 'main' || branch == 'master') {
+          await slackClient.chat.postMessage({
+            channel: channelId,
+            text: `🤩 Branch  <${mr.url}|${mr.title}> was merged into '${branch}' by '${payload.user.name}'. Please make sure to update your branches with the latest 'main'.`,
+          });
         }
+        // レコードを消す
+        await deleteSlackThreadTimeStamp(mrid);
+
+        return {
+          headers: responseHeaders,
+          statusCode: 200,
+          body: JSON.stringify({
+            message: 'OK',
+            detail: `Branch  <${mr.url}|${mr.title}> was merged into '${branch}'`,
+          }),
+        };
       }
       return {
         headers: responseHeaders,
         statusCode: 200,
         body: JSON.stringify({
           message: 'OK',
-          detail: 'This request went through (Not assigned to devin).',
+          detail: 'This request went through (Not action undefined).',
         }),
       };
     }
